@@ -1,0 +1,21 @@
+<% if(list.length !== 0) { %>
+<div class="card-deck">
+    <% list.forEach((user) => { %>
+    <div class="card" style="width: 18rem">
+        <div class="card-body">
+            <h5 class="card-title">ID: <%= user.id %></h5>
+            <p class="card-text">Name: <%= user.name %></p>
+            <p class="card-text">Age: <%= user.age %></p>
+            <a href="/web/user/edit/<%= user.id %>" class="btn btn-primary"
+                >Edit</a
+            >
+            <a href="/web/user/delete/<%= user.id %>" class="btn btn-danger"
+                >Delete</a
+            >
+        </div>
+    </div>
+    <% }) %>
+</div>
+<% } else { %>
+<p>There is no users yet!</p>
+<% } %>
