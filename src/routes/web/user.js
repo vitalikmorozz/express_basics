@@ -1,13 +1,13 @@
 const router = require('express').Router();
 
-const userService = require('../../userService');
+const userService = require('../../service/UserService');
 
-router.get('/list', (req, res) => {
-    res.render('user/list', { list: userService.getAll() });
+router.get('/list', async (req, res) => {
+    res.render('user/list', { list: await userService.find() });
 });
 
-router.get('/edit/:id', (req, res) => {
-    const user = userService.getById(req.params.id);
+router.get('/edit/:id', async (req, res) => {
+    const user = await userService.findById(req.params.id);
     if (!user) {
         res.redirect('/web/user/list');
         return;
@@ -15,16 +15,27 @@ router.get('/edit/:id', (req, res) => {
     res.render('user/edit', { user });
 });
 
-router.post('/edit/:id', (req, res) => {
-    const id = req.params.id;
-    const name = req.body.name;
-    const age = req.body.age;
-    userService.editById(id, name, age);
+router.post('/create', async (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    await userService.save({
+        username,
+        password,
+        createdAt: Date.now().toString(),
+    });
     res.redirect('/web/user/list');
 });
 
-router.get('/delete/:id', (req, res) => {
-    userService.deleteById(req.params.id);
+router.post('/edit/:id', async (req, res) => {
+    const id = req.params.id;
+    const username = req.body.username;
+    const password = req.body.password;
+    await userService.updateById(id, { username, password });
+    res.redirect('/web/user/list');
+});
+
+router.get('/delete/:id', async (req, res) => {
+    await userService.deleteById(req.params.id);
     res.redirect('/web/user/list');
 });
 

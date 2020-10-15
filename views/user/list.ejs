@@ -1,21 +1,95 @@
-<% if(list.length !== 0) { %>
-<div class="card-deck">
-    <% list.forEach((user) => { %>
-    <div class="card" style="width: 18rem">
-        <div class="card-body">
-            <h5 class="card-title">ID: <%= user.id %></h5>
-            <p class="card-text">Name: <%= user.name %></p>
-            <p class="card-text">Age: <%= user.age %></p>
-            <a href="/web/user/edit/<%= user.id %>" class="btn btn-primary"
-                >Edit</a
-            >
-            <a href="/web/user/delete/<%= user.id %>" class="btn btn-danger"
-                >Delete</a
-            >
-        </div>
-    </div>
-    <% }) %>
-</div>
-<% } else { %>
-<p>There is no users yet!</p>
-<% } %>
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#ID</th>
+            <th scope="col">Username</th>
+            <th scope="col">Password</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% list.forEach((user) => { %>
+            <tr>
+                <th scope="row"><%= user.id %></th>
+                <td><%= user.username %></td>
+                <td><%= user.password %></td>
+                <td>
+                    <a href="/web/user/edit/<%= user.id %>" class="btn btn-primary">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pen" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M13.498.795l.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                        </svg>
+                    </a>
+                </td>
+                <td>
+                    <a href="/web/user/delete/<%= user.id %>" class="btn btn-danger">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                        </svg>
+                    </a>
+                </td>
+            </tr>
+        <% }) %>
+        <tr id="add-row" class="hidden">
+            <form id="add-form" action="/web/user/create" method="POST">
+                <td>ID</td>
+                <td><input name="username" id="username" type="text" placeholder="Username"/></td>
+                <td><input name="password" id="password" type="text" placeholder="Password"/></td>
+                <td>
+                    <button id="form-submit" type="submit" class="btn btn-success">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                        </svg>
+                    </button>
+                </td>
+                <td>
+                    <button id="cancel-btn" type="button" class="btn btn-danger">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                        </svg>
+                    </button>
+                </td>
+            </form>
+        </tr>
+    </tbody>
+</table>
+<button id="add-btn" type="button" class="btn btn-success">
+    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-journal-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+        <path fill-rule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5z"/>
+    </svg>
+</button>
+
+<script>
+    const row = document.querySelector('#add-row');
+    const addBtn = document.querySelector('#add-btn');
+    const formSubmitBtn = document.querySelector('#form-submit');
+    const cancelBtn = document.querySelector('#cancel-btn');
+
+    const usernameInput = document.querySelector('#username');
+    const passwordInput = document.querySelector('#password');
+
+    cancelBtn.addEventListener('click', () => {
+        row.classList.toggle('hidden');
+        addBtn.classList.toggle('hidden');
+        usernameInput.value = '';
+        passwordInput.value = '';
+    })
+
+    formSubmitBtn.addEventListener('click', () => {
+        row.classList.toggle('hidden');
+        addBtn.classList.toggle('hidden');
+    })
+    
+    addBtn.addEventListener('click', () => {
+        row.classList.toggle('hidden');
+        addBtn.classList.toggle('hidden');
+    })
+</script>

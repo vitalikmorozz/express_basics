@@ -1,7 +1,7 @@
 <form action="/web/user/edit/<%= user.id %>" method="POST">
-    <label for="name">Name</label>
-    <input name="name" id="name" type="text" value="<%= user.name %>" />
-    <label for="age">Age</label>
-    <input name="age" id="age" type="number" value="<%= user.age %>" />
+    <label for="username">Username</label>
+    <input name="username" id="username" type="text" value="<%= user.username %>" />
+    <label for="password">Password</label>
+    <input name="password" id="password" type="text" value="<%= user.password %>" />
     <button type="submit" class="btn btn-success">Submit</button>
 </form>

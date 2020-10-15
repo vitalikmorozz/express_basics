@@ -1,6 +1,28 @@
+require('dotenv').config();
+
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
+const mongoose = require('mongoose');
 const path = require('path');
+
+// Connect to MongoDB using Mongoose and MongoDB Atlas
+mongoose.connect(
+    process.env.MONGO_DB_URI,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    },
+    (err) => {
+        if (err) console.log(`MongoDB connection failed! Error: ${err}`);
+        else console.log('MongoDB connected successfully');
+    }
+);
+
+// Mongoose deprecation warning fixes
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
 
 // Import middleware
 const logger = require('./middleware/logger');
@@ -19,6 +41,8 @@ const server = express();
 server.set('view engine', 'ejs');
 server.use(expressLayouts);
 
+server.use(logger);
+
 // To properly parse form data
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
@@ -29,8 +53,8 @@ server.use('/web/user', usersWebRouter);
 
 server.get('/', (req, res) => {
     res.send('Hello world');
-    // res.status(200).send('Okay');
-    // res.end();
+    // res.sendStatus(200);
+    // res.status(200).end();
     // res.sendFile(path.join(__dirname, '../', 'public/index.html'));
 });
 
